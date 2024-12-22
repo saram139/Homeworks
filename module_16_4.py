@@ -42,8 +42,8 @@ async def update_user(user_id: Annotated[int, Path(ge=1, le=100, description="En
 
 @app.delete("/user/{user_id}")
 async def delete_user(user_id: Annotated[int, Path(ge=1, le=100, description="Enter ID", example='2')]):
-    user = users[user_id-1]
-    if user.id != user_id:
-        raise HTTPException(status_code=404, detail='User was not found')
-    delete_user = users.pop(user_id-1)
-    return delete_user
+    for i, user in enumerate(users):
+        if user.id == user_id:
+            delete_user = users.pop(i)
+            return delete_user
+    raise HTTPException(status_code=404, detail='User was not found')
